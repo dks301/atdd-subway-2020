@@ -44,6 +44,9 @@ public class SubwayPath {
         if (distance <= 10) {
             return 0;
         }
-        return (int) ((Math.ceil((distance - 1) / 5) + 1) * 100);
+        if (distance <= 50) {
+            return (int)((Math.ceil((distance - 1) / 5) + 1) * 100);
+        }
+        return 1000 + (int)((Math.ceil((distance - 51) / 8) + 1) * 100);
     }
 }
