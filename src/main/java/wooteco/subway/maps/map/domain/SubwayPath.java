@@ -1,6 +1,7 @@
 package wooteco.subway.maps.map.domain;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
@@ -8,6 +9,7 @@ import com.google.common.collect.Lists;
 public class SubwayPath {
     private static final int BASIC_FARE = 1250;
     private static final int BASIC_DISTANCE = 10;
+
     private List<LineStationEdge> lineStationEdges;
 
     public SubwayPath(List<LineStationEdge> lineStationEdges) {
@@ -38,7 +40,19 @@ public class SubwayPath {
     public int calculateFare() {
         final int distance = calculateDistance();
 
-        return BASIC_FARE + calculateOverFare(distance - BASIC_DISTANCE);
+        return BASIC_FARE + calculateLineExtraFare() + calculateOverFare(distance - BASIC_DISTANCE);
+    }
+
+    private int calculateLineExtraFare() {
+        int lineExtraFare = 0;
+
+        for (final LineStationEdge lineStationEdge : lineStationEdges) {
+            if (lineStationEdge.getLine().getExtraFare() > lineExtraFare) {
+                lineExtraFare = lineStationEdge.getLine().getExtraFare();
+            }
+        }
+
+        return lineExtraFare;
     }
 
     private int calculateOverFare(int overDistance) {

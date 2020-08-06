@@ -10,6 +10,7 @@ public class LineRequest {
     private LocalTime startTime;
     private LocalTime endTime;
     private Integer intervalTime;
+    private Integer extraFare;
 
     public LineRequest() {
     }
@@ -20,6 +21,15 @@ public class LineRequest {
         this.startTime = startTime;
         this.endTime = endTime;
         this.intervalTime = intervalTime;
+    }
+
+    public LineRequest(String name, String color, LocalTime startTime, LocalTime endTime, Integer intervalTime, Integer extraFare) {
+        this.name = name;
+        this.color = color;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.intervalTime = intervalTime;
+        this.extraFare = extraFare;
     }
 
     public String getName() {
