@@ -17,6 +17,7 @@ import wooteco.subway.maps.line.domain.LineStation;
 
 class SubwayPathTest {
     private SubwayPath subwayPath;
+    private List<LineStationEdge> lineStations;
 
     @BeforeEach
     void setUp() {
@@ -27,7 +28,7 @@ class SubwayPathTest {
         line3.addLineStation(lineStation6);
         line3.addLineStation(lineStation7);
 
-        List<LineStationEdge> lineStations = Lists.newArrayList(
+        lineStations = Lists.newArrayList(
             new LineStationEdge(lineStation6, line3.getId()),
             new LineStationEdge(lineStation7, line3.getId())
         );
@@ -58,9 +59,66 @@ class SubwayPathTest {
         assertThat(subwayPath.calculateDistance()).isEqualTo(3);
     }
 
-    @DisplayName("calculateFare가 기본 요금인 1250을 반환한다.")
+    @DisplayName("calculateFare가 거리가 3km일 때 기본 요금인 1250을 반환한다.")
     @Test
     void calculateFare() {
         assertThat(subwayPath.calculateFare()).isEqualTo(1250);
+    }
+
+    @DisplayName("거리가 11km일 때 1550원을 반환한다.")
+    @Test
+    void calculateFare2() {
+        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
+        line3.addLineStation(new LineStation(1L, null, 0, 0));
+        LineStation lineStation6 = new LineStation(4L, 1L, 1, 2);
+        LineStation lineStation7 = new LineStation(3L, 4L, 10, 2);
+        line3.addLineStation(lineStation6);
+        line3.addLineStation(lineStation7);
+
+        lineStations = Lists.newArrayList(
+            new LineStationEdge(lineStation6, line3.getId()),
+            new LineStationEdge(lineStation7, line3.getId())
+        );
+
+        subwayPath = new SubwayPath(lineStations);
+        assertThat(subwayPath.calculateFare()).isEqualTo(1550);
+    }
+
+    @DisplayName("거리가 15km일 때 1550원을 반환한다.")
+    @Test
+    void calculateFare3() {
+        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
+        line3.addLineStation(new LineStation(1L, null, 0, 0));
+        LineStation lineStation6 = new LineStation(4L, 1L, 5, 2);
+        LineStation lineStation7 = new LineStation(3L, 4L, 10, 2);
+        line3.addLineStation(lineStation6);
+        line3.addLineStation(lineStation7);
+
+        lineStations = Lists.newArrayList(
+            new LineStationEdge(lineStation6, line3.getId()),
+            new LineStationEdge(lineStation7, line3.getId())
+        );
+
+        subwayPath = new SubwayPath(lineStations);
+        assertThat(subwayPath.calculateFare()).isEqualTo(1550);
+    }
+
+    @DisplayName("거리가 50km일 때 2250원을 반환한다.")
+    @Test
+    void calculateFare4() {
+        Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
+        line3.addLineStation(new LineStation(1L, null, 0, 0));
+        LineStation lineStation6 = new LineStation(4L, 1L, 25, 2);
+        LineStation lineStation7 = new LineStation(3L, 4L, 25, 2);
+        line3.addLineStation(lineStation6);
+        line3.addLineStation(lineStation7);
+
+        lineStations = Lists.newArrayList(
+            new LineStationEdge(lineStation6, line3.getId()),
+            new LineStationEdge(lineStation7, line3.getId())
+        );
+
+        subwayPath = new SubwayPath(lineStations);
+        assertThat(subwayPath.calculateFare()).isEqualTo(2250);
     }
 }
