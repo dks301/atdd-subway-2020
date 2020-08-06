@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 
 public class SubwayPath {
     private static final int BASIC_FARE = 1250;
+    private static final int BASIC_DISTANCE = 10;
     private List<LineStationEdge> lineStationEdges;
 
     public SubwayPath(List<LineStationEdge> lineStationEdges) {
@@ -37,16 +38,16 @@ public class SubwayPath {
     public int calculateFare() {
         final int distance = calculateDistance();
 
-        return BASIC_FARE + calculateOverFare(distance);
+        return BASIC_FARE + calculateOverFare(distance - BASIC_DISTANCE);
     }
 
-    private int calculateOverFare(int distance) {
-        if (distance <= 10) {
+    private int calculateOverFare(int overDistance) {
+        if (overDistance <= 0) {
             return 0;
         }
-        if (distance <= 50) {
-            return (int)((Math.ceil((distance - 1) / 5) + 1) * 100);
+        if (overDistance <= 40) {
+            return (int)((Math.ceil((overDistance - 1) / 5) + 1) * 100);
         }
-        return 1000 + (int)((Math.ceil((distance - 51) / 8) + 1) * 100);
+        return 800 + (int)((Math.ceil((overDistance - 41) / 8) + 1) * 100);
     }
 }

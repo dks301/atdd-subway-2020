@@ -65,7 +65,7 @@ class SubwayPathTest {
         assertThat(subwayPath.calculateFare()).isEqualTo(1250);
     }
 
-    @DisplayName("거리가 11km일 때 1550원을 반환한다.")
+    @DisplayName("거리가 11km일 때 1350원을 반환한다.")
     @Test
     void calculateFare2() {
         Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
@@ -81,10 +81,10 @@ class SubwayPathTest {
         );
 
         subwayPath = new SubwayPath(lineStations);
-        assertThat(subwayPath.calculateFare()).isEqualTo(1550);
+        assertThat(subwayPath.calculateFare()).isEqualTo(1350);
     }
 
-    @DisplayName("거리가 15km일 때 1550원을 반환한다.")
+    @DisplayName("거리가 15km일 때 1350원을 반환한다.")
     @Test
     void calculateFare3() {
         Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
@@ -100,10 +100,10 @@ class SubwayPathTest {
         );
 
         subwayPath = new SubwayPath(lineStations);
-        assertThat(subwayPath.calculateFare()).isEqualTo(1550);
+        assertThat(subwayPath.calculateFare()).isEqualTo(1350);
     }
 
-    @DisplayName("거리가 50km일 때 2250원을 반환한다.")
+    @DisplayName("거리가 50km일 때 2050원을 반환한다.")
     @Test
     void calculateFare4() {
         Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
@@ -119,10 +119,10 @@ class SubwayPathTest {
         );
 
         subwayPath = new SubwayPath(lineStations);
-        assertThat(subwayPath.calculateFare()).isEqualTo(2250);
+        assertThat(subwayPath.calculateFare()).isEqualTo(2050);
     }
 
-    @DisplayName("거리가 51km일 때 2350원을 반환한다.")
+    @DisplayName("거리가 51km일 때 2150원을 반환한다.")
     @Test
     void calculateFare5() {
         Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
@@ -138,10 +138,10 @@ class SubwayPathTest {
         );
 
         subwayPath = new SubwayPath(lineStations);
-        assertThat(subwayPath.calculateFare()).isEqualTo(2350);
+        assertThat(subwayPath.calculateFare()).isEqualTo(2150);
     }
 
-    @DisplayName("거리가 59km일 때 2450원을 반환한다.")
+    @DisplayName("거리가 59km일 때 2250원을 반환한다.")
     @Test
     void calculateFare6() {
         Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
@@ -157,6 +157,25 @@ class SubwayPathTest {
         );
 
         subwayPath = new SubwayPath(lineStations);
-        assertThat(subwayPath.calculateFare()).isEqualTo(2450);
+        assertThat(subwayPath.calculateFare()).isEqualTo(2250);
+    }
+
+    @DisplayName("거리가 10km이고 노선 추가요금이 500원일 때 1750원을 반환한다.")
+    @Test
+    void calculateFare7() {
+        Line line3 = TestObjectUtils.createLineWithExtraFare(3L, "3호선", "ORANGE", 500);
+        line3.addLineStation(new LineStation(1L, null, 0, 0));
+        LineStation lineStation6 = new LineStation(4L, 1L, 5, 2);
+        LineStation lineStation7 = new LineStation(3L, 4L, 5, 2);
+        line3.addLineStation(lineStation6);
+        line3.addLineStation(lineStation7);
+
+        lineStations = Lists.newArrayList(
+            new LineStationEdge(lineStation6, line3.getId()),
+            new LineStationEdge(lineStation7, line3.getId())
+        );
+
+        subwayPath = new SubwayPath(lineStations);
+        assertThat(subwayPath.calculateFare() + line3.getExtraFare()).isEqualTo(1750);
     }
 }
