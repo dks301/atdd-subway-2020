@@ -222,11 +222,24 @@ export default {
     ...mapActions([SEARCH_PATH, FETCH_STATIONS]),
     async onSearchResult() {
       try {
-        await this.searchPath(this.path);
+        if (this.path.type === 'ARRIVAL_TIME') {
+          const time = this.YYYYMMDDhhmm();
+          return await this.searchPath({ ...this.path, time});
+        }
+        await this.searchPath({ ...this.path });
       } catch (e) {
         this.showSnackbar(SNACKBAR_MESSAGES.COMMON.FAIL)
         console.error(e)
       }
+    },
+    YYYYMMDDhhmm() {
+      const today = new Date();
+      const YYYY = today.getFullYear().toString();
+      const MM = (today.getMonth() + 1) < 10 ? `0${today.getMonth() + 1}` : today.getMonth().toString();
+      const DD = today.getDay() < 10 ? `0${today.getDay()}` : today.getDay().toString();
+      const hh = this.departureTimeView.hour;
+      const mm = this.departureTimeView.minute;
+      return YYYY + MM + DD + hh + mm;
     },
     initDepartureTimeView() {
       this.departureTimeSelectView.hour = Array.from(Array(24)).map((_, i) => this.getTimeSelectView(i))
