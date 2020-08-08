@@ -208,9 +208,9 @@ export default {
     ...mapGetters(['stations', 'pathResult']),
     getCurrentTime() {
       const today = new Date();
-      const hour = today.getHours();
+      const hour = today.getHours() - 12;
       const minute = today.getMinutes();
-      return `${hour > 12 ? '오후' : '오전'} ${hour < 10 ? `0${hour}` : hour}:${minute < 10 ? `0${minute}` : minute}`
+      return `${today.getHours() > 12 ? '오후' : '오전'} ${hour < 10 ? `0${hour}` : hour}:${minute < 10 ? `0${minute}` : minute}`
     }
   },
   async created() {
@@ -237,20 +237,26 @@ export default {
       const YYYY = today.getFullYear().toString();
       const MM = (today.getMonth() + 1) < 10 ? `0${today.getMonth() + 1}` : today.getMonth().toString();
       const DD = today.getDay() < 10 ? `0${today.getDay()}` : today.getDay().toString();
-      const hh = this.departureTimeView.hour;
+      const hh = this.departureTimeView.dayTime === 'pm' ? (parseInt(this.departureTimeView.hour) + 12).toString() : this.departureTimeView.hour;
       const mm = this.departureTimeView.minute;
       return YYYY + MM + DD + hh + mm;
     },
     initDepartureTimeView() {
-      this.departureTimeSelectView.hour = Array.from(Array(24)).map((_, i) => this.getTimeSelectView(i))
-      this.departureTimeSelectView.minute = Array.from(Array(60)).map((_, i) => this.getTimeSelectView(i))
+      this.departureTimeSelectView.hour = Array.from(Array(12)).map((_, i) => this.getHourSelectView(i))
+      this.departureTimeSelectView.minute = Array.from(Array(60)).map((_, i) => this.getMinuteSelectView(i))
       const today = new Date()
-      const hour = today.getHours()
-      const dayTime = hour > 12 ? 'pm' : 'am'
+      const dayTime = today.getHours() > 12 ? 'pm' : 'am'
+      const hour = today.getHours() > 12 ? today.getHours() - 12 : today.getHours()
       const minute = today.getMinutes()
-      this.departureTimeView = { dayTime, minute, hour }
+      this.departureTimeView = { dayTime, hour, minute }
     },
-    getTimeSelectView(i) {
+    getHourSelectView(i) {
+      return {
+        text: i + 1 < 10 ? `0${i + 1}` : i + 1,
+        value: i + 1
+      }
+    },
+    getMinuteSelectView(i) {
       return {
         text: i < 10 ? `0${i}` : i,
         value: i
