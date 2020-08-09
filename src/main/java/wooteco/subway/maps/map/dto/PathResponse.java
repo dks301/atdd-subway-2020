@@ -20,6 +20,10 @@ public class PathResponse {
         this.fare = fare;
     }
 
+    public PathResponse discountBy(int fare) {
+        return new PathResponse(stations, duration, distance, fare);
+    }
+
     public List<StationResponse> getStations() {
         return stations;
     }

@@ -8,6 +8,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import wooteco.security.core.Authentication;
 import wooteco.security.core.AuthenticationPrincipal;
 import wooteco.security.core.context.SecurityContextHolder;
+import wooteco.security.core.userdetails.UserDetails;
+import wooteco.subway.members.member.domain.LoginMember;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -22,7 +24,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new AuthorizationException();
+            return new LoginMember(Long.MAX_VALUE, "abc@notlogin.com", "1234", 30);
         }
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);

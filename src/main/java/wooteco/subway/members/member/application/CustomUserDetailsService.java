@@ -16,8 +16,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public LoginMember loadUserByUsername(String principal) {
-        Member member = memberRepository.findByEmail(principal).orElseThrow(AuthenticationException::new);
-        return new LoginMember(member.getId(), member.getEmail(), member.getPassword(), member.getAge());
+        try {
+            Member member = memberRepository.findByEmail(principal).orElseThrow(AuthenticationException::new);
+            return new LoginMember(member.getId(), member.getEmail(), member.getPassword(), member.getAge());
+        } catch (final AuthenticationException e) {
+            return new LoginMember(Long.MAX_VALUE, "abc@notlogin.com", "1234", 30);
+        }
     }
 
 }
